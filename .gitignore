@@ -6,11 +6,17 @@ lib-cov
 *.out
 *.pid
 *.gz
+<<<<<<< HEAD
 *.DS_Store
+=======
+>>>>>>> c96d324f4174a35298a415e23bf365b0b6198ec6
 
 pids
 logs
 results
 
 npm-debug.log
+<<<<<<< HEAD
 node_modules
+=======
+>>>>>>> c96d324f4174a35298a415e23bf365b0b6198ec6
