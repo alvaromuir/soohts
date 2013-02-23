@@ -1,0 +1,102 @@
+!!! 5
+//if lt IE 7
+  <html class="no-js lt-ie9 lt-ie8 lt-ie7">
+//if IE 7
+  <html class="no-js lt-ie9 lt-ie8">
+//if IE 8
+  <html class="no-js lt-ie9">
+//[if gt IE 8]><!
+html(class='no-js')
+  //<![endif]
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+
+    title= pageTitle
+
+    meta(name='description', content='Soohts, the Social Out of Home Toolset')
+    meta(name='viewport', content='width=device-width')
+    meta(name='author', content='Alvaro Muir, @alvaromuir')
+
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css')
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css')
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js')
+
+    script(id="entry-template", type="text/x-handlebars-template")
+      p(class="lead") {{tweet}}
+      p
+        small {{account}}
+
+
+  body
+    //if lt IE 7
+      p.chromeframe.
+        You are using an outdated browser.
+        Please <a href="http://browsehappy.com/">upgrade your browser</a> or
+        <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a>
+        to improve your experience.
+    div(class='container')
+      h1 Soohts!
+      p welcome to soohts.
+
+      div(class='row')
+        div(class="span6")
+          form
+            fieldset
+                legend Stream Tweets by filter
+                label Filters
+                input(type='text', placeholder='Comma delimited…')
+                span.help-block These are keywords or geo-codes to filter the stream by.
+                button.btn(type='submit') Submit
+
+        div(class="span6")
+          p &nbsp;
+          div(id="tweet-well", class="well")
+
+
+
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/lodash.js/1.0.1/lodash.min.js')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js')
+    script(src='/socket.io/socket.io.js')
+    script
+      var tweets = [];
+      var displayTweet = '';
+      var count = 0;
+
+      var socket = io.connect('http://localhost:8000');
+      socket.on('news', function (data) {
+        console.log(data);
+        });
+
+      function randTweet () {
+      return tweets[0];
+        //return tweets[_.random(0, tweets.length)];
+      }
+      function pushTweet () {
+        clearInterval(window.myInt);
+        window.myInt = setInterval(function(){
+          //$('#tweet-stream').html(new randTweet().text);
+          
+          var randTweet = tweets[_.random(0, tweets.length)];
+          if (randTweet.text) { displayTweet = randTweet.text; }
+          $('#tweet-well').html(displayTweet);
+          }, 3000);
+      };
+
+      socket.on('tweets', function(tweet) {
+        pushTweet(tweet.text);
+        tweets.push(tweet);
+        if (count < 10) {
+          count ++;
+        }
+        else {
+          count = 0;
+        };
+      });
+
+    script
+      var _gaq=[['_setAccount','UA-37762861-1'],['_trackPageview']];
+      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g,s)}(document,'script'));

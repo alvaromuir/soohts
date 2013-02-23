@@ -1,0 +1,33 @@
+{
+  "name": "soohts",
+  "version": "0.0.0",
+  "description": "Social OOH Toolset",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alvaromuir/soohts"
+  },
+  "keywords": [
+    "social",
+    "media",
+    "ooh"
+  ],
+  "author": "Alvaro Muir, @alvaromuir",
+  "license": "MIT",
+  "dependencies": {
+    "node-redis": "~0.1.5",
+    "bunyan": "~0.18.2",
+    "mongoose": "~3.5.7",
+    "restify": "~2.2.1",
+    "socket.io": "~0.9.13",
+    "jade": "~0.28.1",
+    "twit": "~1.0.12"
+  },
+  "devDependencies": {
+    "request": "~2.14.0",
+    "mocha": "~1.8.1"
+  }
+}
