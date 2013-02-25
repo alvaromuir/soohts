@@ -1,10 +1,11 @@
 ///
-  DB TBD and any external API config
+  DB setup and any external API config
 ///
 
 mongoose = require 'mongoose'
-campaignSchema = mongoose.Schema require './schema'
+Twitter = require 'twit'
 
+campaignSchema = mongoose.Schema require './schema'
 
 module.exports =
   soohts:
@@ -32,8 +33,11 @@ module.exports =
       
       mongoose.connect connString
 
-  twitterCreds:
-    consumer_key: 'DHzjdfmE14a0wLvbng3Wxw'
-    consumer_secret: 'xHeozURKXBM1ycgilw50n2NV9R58GoznCM4ts0CPE2M'
-    access_token: '37232975-bHnl1SJCMwBVKuovFIbNuRtYxPfKCVlzYob7QhQla'
-    access_token_secret: 'wWj7UKhbQF58TDD7jc0ExpLdAfk60DEAKBNTiLUrb0'
+  twitter: 
+    keys:
+      consumer_key: 'DHzjdfmE14a0wLvbng3Wxw'
+      consumer_secret: 'xHeozURKXBM1ycgilw50n2NV9R58GoznCM4ts0CPE2M'
+      access_token: '37232975-bHnl1SJCMwBVKuovFIbNuRtYxPfKCVlzYob7QhQla'
+      access_token_secret: 'wWj7UKhbQF58TDD7jc0ExpLdAfk60DEAKBNTiLUrb0'
+    init: ->
+      new Twitter this.keys
