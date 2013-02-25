@@ -43,15 +43,6 @@ buildQueryString = (queryObj, cb) ->
       cb queryString.substring 0, queryString.length-1
 
 
-queryTweetSearch = (queryParams, cb) ->
-  tweets = []
-  client.get 'q=' + queryParams, (err, creq, cres, data) ->
-    if err 
-      cres.send err
-    tweets.push tweet for tweet in data.results
-    cb tweets
-
-
 twitterSearchUrl = client.url.href
 
 
@@ -61,25 +52,10 @@ module.exports =
     res.send {move_along: 'nothing to see here... ', follow_us: '@cbsoudoor'}
     return next()
 
-    ///
-    tmpl = getTemplate 'index'
-    context = 
-      pageTitle: 'Welcome!' + postTitle
-      pageLegend: 'Stream Tweets By Filter'
-
-    content = render.jade tmpl, context
-
-    res.writeHead 200, 
-      'Content-Length': content.length
-      'Content-Type': 'text/html'
-    res.end content
-    ///
-
   # filter url params
   queryFilters: (req, res, next) ->
     buildQueryString req.query, (rsltString) ->
       searchString = twitterSearchUrl + rsltString
-
       client.get searchString, (err, creq, cres, cobj) ->
         if err
           res.send err

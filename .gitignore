@@ -7,6 +7,11 @@ lib-cov
 *.pid
 *.gz
 *.note
+.jshintrc 
+.editorconfig
+.bowercc
+.gitignore
+.tmp/
 <<<<<<< HEAD
 *.DS_Store
 =======

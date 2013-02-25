@@ -1,6 +1,10 @@
 @import 'sass-bootstrap/lib/bootstrap';
 
-.hero-unit {
-    margin: 50px auto 0 auto;
-    width: 300px;
+
+.result-info {
+  height: 200px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin: 40px auto 20px auto;
+  @include border-radius(5px);  
 }

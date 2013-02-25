@@ -5,12 +5,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>{{title}}</title>
+    <title>Soohts!</title>
     <meta name="description" content="Soohts, the Social Out of Home Toolset">
     <meta name="viewport" content="width=device-width">
     <meta name="author" content="Alvaro Muir, @alvaromuir">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="styles/main.css">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
     <script id="entry-template" type="text/x-handlebars-template">
       <p class="lead">{{tweet}}</p>
@@ -25,80 +26,28 @@
       to improve your experience.
     </p><![endif]-->
     <div class="container">
-      <h1>Soohts!</h1>
-      <p>welcome to soohts.</p>
+      <h1>Soohts!</h1><span class="lead">social out of home tool set.</span>
       <div class="row">
         <div class="span6">
-          <form action="/filter" method="post">
+          <form id="filter-form">
             <fieldset>
-              <legend>{{pageLegend}}</legend>
-              <label>Filters</label>
-              <input type="text" placeholder="Comma delimited…" name="filterSet"><span class="help-block">These are keywords or geo-codes to filter the stream by.</span>
+              <legend>Filters</legend>
+              <label>Keywords</label>
+              <input type="text" placeholder="Comma delimited…" name="keywords"><span class="help-block">These are keywords or geo-codes to filter the stream by.</span>
+              <label>Coordinates &amp; radius</label>
+              <input type="text" placeholder="N/W  e.g. 40.75,-73.97" name="coordinates" class="input-med">
+              <input type="text" placeholder="e.g. 5" name="radius" class="input-mini"><span class="help-block">Latitude, longitude</span>
               <button type="submit" class="btn">Submit</button>
             </fieldset>
           </form>
         </div>
-        <div class="span6">
-          <p>&nbsp;</p>
+        <div class="span6"><!--div(class="result-info")<span class="lead">results:</span>-->
           <div id="tweet-well" class="well"><img id="loader" src="http://www.oohrocks.com/images/ajax-loader.gif" alt="loading..." class="text-center"><span class="tweet"></span></div>
         </div>
       </div>
     </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/1.0.1/lodash.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.4/require.min.js" data-main="scripts/main"></script>
-    <script>
-      fadeReplace = function(div, data) {
-        var $this = $(div);
-        $this.fadeOut(function(){
-          $this.html(data);
-          $this.fadeIn();
-        });
-      };
-      
-      var cycle = function(arr, speed, cb) {
-        if (window.timer) {
-          window.clearInterval(window.timer);
-          }
-        var count = 0;
-        window.timer = setInterval(function(){
-          if (count !== arr.length) {
-            cb(arr[count]);
-            count += 1
-          } else {
-            count = 0;
-            cb(arr[count]);
-            count += 1
-          }
-        }, speed);
-      };
-      
-      $.ajax({
-        url: "http://localhost:8000/api/response.json?q=@cbsoutdoor",
-        context: document.body
-        }).done(function(twitterQuery) {
-        window.tweets = twitterQuery.results;
-        $('.tweet').hide();
-        $('#tweet-well img').fadeOut(function(){
-          $('.tweet').html(_.last(tweets).text);
-          $('.tweet').fadeIn();
-        });
-        cycle(tweets, 5000, function(tweet){
-          fadeReplace('.tweet',tweet.text);
-        });
-      });
-      
-    </script>
-    <script>
-      var socket = io.connect('http://localhost:8000');
-      socket.on('news', function (data) {
-        console.log(data);
-      });
-      
-    </script>
     <script>
       var _gaq=[['_setAccount','UA-37762861-1'],['_trackPageview']];
       (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];

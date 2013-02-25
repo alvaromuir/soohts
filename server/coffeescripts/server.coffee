@@ -3,7 +3,6 @@ connect   = require 'connect'
 bunyan    = require 'bunyan'
 socketio  = require 'socket.io' 
 
-
 routes    = require './routes'
 config    = require './config'
 soohtsdb  = config.soohts
