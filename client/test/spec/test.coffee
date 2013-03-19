@@ -1,4 +1,4 @@
-#global describe it *
+
 'use strict';
 $ =  jQuery()
 describe 'The WebApp', ->

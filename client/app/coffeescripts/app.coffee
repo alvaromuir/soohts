@@ -1,8 +1,7 @@
 #global define
 
+'use strict'
 define ['jquery', 'underscore', 'twitter', 'maps', 'form-clean'], ($, _, twitter, maps, formCleaner) ->
-  'use strict'
-
   $ ->
     @app = window.app ? {}
 
@@ -25,15 +24,15 @@ define ['jquery', 'underscore', 'twitter', 'maps', 'form-clean'], ($, _, twitter
       queryObj = {}
       radValue = formCleaner.setQueryRadius $radius.val().trim()
 
-      queryObj['q'] = formCleaner.setQueryKeywords $keywords.val().trim()
+      queryObj.q = formCleaner.setQueryKeywords $keywords.val().trim()
 
       if formCleaner.contentExists $locations
         if _.include $locations.val().trim(), 'My Current Location'
-          queryObj['geocode'] = app.userGeo['lat']+','+app.userGeo['lng']+','+radValue.miles+'mi'
+          queryObj.geocode = app.userGeo.lat +','+ app.userGeo.lng +','+ radValue.miles +'mi'
           $(document).trigger 'app.queryObjResults', queryObj
         else
           formCleaner.setQueryLocation $locations.val().trim(), (rslts) ->
-            queryObj['geocode'] = rslts.lat + ',' + rslts.lng + ',' +  radValue.miles + 'mi'
+            queryObj.geocode = rslts.lat + ',' + rslts.lng + ',' +  radValue.miles + 'mi'
             $(document).trigger 'app.queryObjResults', queryObj
 
       else
@@ -65,7 +64,7 @@ define ['jquery', 'underscore', 'twitter', 'maps', 'form-clean'], ($, _, twitter
         radius: radValue.meters
         center: app.rsltMap.getCenter()
 
-      if parseInt $count.val().trim()
+      if parseInt $count.val().trim(), 10
         queryObj.rpp = $count.val()
       else
         queryObj.rpp = 15

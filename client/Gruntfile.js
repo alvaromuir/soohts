@@ -26,8 +26,8 @@ module.exports = function (grunt) {
                 tasks: ['coffee:test']
             },
             jade: {
-              files: ['**/*.jade'],
-              tasks: ['jade:compile']
+                files: ['**/*.jade'],
+                tasks: ['jade:compile']
             },
             compass: {
                 files: ['<%= yeoman.app %>/styles/*.{scss,sass}'],
@@ -89,7 +89,10 @@ module.exports = function (grunt) {
         },
         jshint: {
             options: {
-                jshintrc: '.jshintrc'
+                jshintrc: '.jshintrc',
+                white: false,
+                shadow: true,
+                eqeqeq: false
             },
             all: [
                 'Gruntfile.js',
@@ -112,7 +115,7 @@ module.exports = function (grunt) {
                     cwd: '<%= yeoman.app %>/coffeescripts/',
                     src: '**/*.coffee',
                     dest: '<%= yeoman.app %>/scripts/',
-                    rename: function(destBase, destPath) {
+                    rename: function (destBase, destPath) {
                         return destBase + destPath.replace(/\.coffee$/, '.js');
                     }
                 }]
@@ -123,32 +126,32 @@ module.exports = function (grunt) {
                     cwd: 'test/spec/',
                     src: '**/*.coffee',
                     dest: 'test/spec/',
-                    rename: function(destBase, destPath) {
+                    rename: function (destBase, destPath) {
                         return destBase + destPath.replace(/\.coffee$/, '.js');
                     }
                 }]
             }
         },
         jade: {
-          compile: {
-            options: {
-                client: false,
-                basePath: 'app/jade',
-                pretty: true,
-                data: {
-                debug: false
-              }
-            },
-           files: [{ 
-                expand: true,
-                cwd: "<%= yeoman.app %>/templates/jade",
-                src: "**/*.jade", 
-                dest: "<%= yeoman.app %>/", 
-                rename: function(destBase, destPath) {
-                    return destBase + destPath.replace(/\.jade$/, '.html');
-                }
-            }] 
-          }
+            compile: {
+                options: {
+                    client: false,
+                    basePath: 'app/jade',
+                    pretty: true,
+                    data: {
+                        debug: false
+                    }
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= yeoman.app %>/templates/jade',
+                    src: '**/*.jade',
+                    dest: '<%= yeoman.app %>/',
+                    rename: function (destBase, destPath) {
+                        return destBase + destPath.replace(/\.jade$/, '.html');
+                    }
+                }]
+            }
         },
         compass: {
             options: {
@@ -297,8 +300,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'jshint',
-        'test',
+        //'jshint',
+        //'test',
         'coffee',
         'compass:dist',
         'useminPrepare',
