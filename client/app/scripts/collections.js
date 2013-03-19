@@ -1,28 +1,37 @@
 (function() {
-  var _ref,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  var _ref;
 
   this.app = (_ref = window.app) != null ? _ref : {};
 
   define(['models'], function() {
-    var GrabTweets;
-    GrabTweets = (function(_super) {
-
-      __extends(GrabTweets, _super);
-
-      function GrabTweets() {
-        return GrabTweets.__super__.constructor.apply(this, arguments);
-      }
-
-      GrabTweets.prototype.model = app.GrabTweet;
-
-      GrabTweets.prototype.url = 'http://localhost:8000/api/response.json';
-
-      return GrabTweets;
-
-    })(Backbone.Collection);
-    return this.app.GrabTweets = new GrabTweets;
+    app.collections = {
+      Tweets: Backbone.Collection.extend({
+        model: app.Tweet,
+        url: 'http://localhost:8000/api/response.json',
+        parse: function(res) {
+          return res.results;
+        }
+      }),
+      StreamCollection: Backbone.Collection.extend({
+        stream: function(options) {
+          var _update;
+          this.unsteam();
+          _update = _bind(function() {
+            this.fetch(options);
+            return this._intervalFetch = window.setTimeout(_update, options.interval || 1000);
+          }, this);
+          return _update();
+        },
+        unstream: function() {
+          window.clearTimeout(this._intervalFetch);
+          return delete this._intervalFetch;
+        },
+        isStreaming: function() {
+          return _.isUndefined(this._intervalFetch);
+        }
+      })
+    };
+    return this.app.Tweets = new app.collections.Tweets;
   });
 
 }).call(this);

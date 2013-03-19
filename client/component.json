@@ -1,12 +1,20 @@
 {
-  "name": "client",
-  "version": "0.0.0",
+  "name": "soohts",
+  "version": "0.0.1",
   "dependencies": {
     "sass-bootstrap": "~2.3.0",
+    "requirejs": "~2.1.4",
+    "modernizr": "~2.6.2",
     "jquery": "~1.9.1",
     "lodash": "~1.0.1",
     "moment": "~2.0.0",
-    "eve": "https://github.com/adobe-webplatform/eve.git#~0.2.4"
+    "handlebars": "~1.0.0-rc.3",
+    "async": "~0.2.3",
+    "requirejs-plugins": "latest",
+    "socket.io": "~0.9.11",
+    "underscore.string": "~2.3.1",
+    "backbone": "~0.9.10",
+    "eve-adobe": "~0.2.4"
   },
   "devDependencies": {}
 }

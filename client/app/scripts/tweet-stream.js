@@ -36,13 +36,13 @@
     };
     streamer = {
       init: function(queryObj) {
-        return app.GrabTweets.fetch({
+        return app.Tweets.fetch({
           data: queryObj,
           success: function() {
             if (window.timer) {
               window.clearInterval(window.timer);
             }
-            window.tweets = app.GrabTweets.models[0].attributes.results;
+            window.tweets = app.Tweets.models[0].attributes.results;
             if (tweets.length > 0) {
               $(".tweet").hide();
               $("#tweet-well img").fadeOut(function() {

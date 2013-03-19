@@ -18,15 +18,15 @@ html(class='no-js')
     meta(name='viewport', content='width=device-width')
     meta(name='author', content='Alvaro Muir, @alvaromuir')
 
-    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css')
-    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css')
     link(rel='stylesheet', href='styles/main.css')
-    script(src='http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js')
-
-    script(id="entry-template", type="text/x-handlebars-template")
-      p(class="lead") {{tweet}}
-      p
-        small {{account}}
+    script(src='../components/modernizr/modernizr.js')
+    script(id="tweet-map-template", type="text/x-handlebars-template")
+      a(href="{{ profile }}", target="_blank")
+        img(src="{{ thumb }}", alt="{{ name }}")
+      div(class="username") 
+        a(href="{{ profile }}", target="_blank") {{ username }}
+      div(class="tweet") {{ text }}
+      div(class="date") {{ date }}
         
   body
     //if lt IE 7
@@ -39,33 +39,41 @@ html(class='no-js')
       h1 Soohts!
       span(class='lead') social out of home tool set.
 
-      div(class='row')
-        div(class="span6")
+      div(class="row")
+        div(class="span5")
           form(id="filter-form")
             fieldset
                 legend Filters
-                label Keywords
-                input(type="text", placeholder="Comma delimited…", name="keywords")
-                span.help-block These are keywords or geo-codes to filter the stream by.
-
+                label Keywords and result count
+                input(id="keywords", type="text", placeholder="Comma delimited…", name="keywords")
+                input(id="quantity", class="input-mini", type="text", placeholder="15 - 100", name="quantity")
+                
                 label Coordinates &amp; radius
-                input(class="input-med", type="text", placeholder="N/W  e.g. 40.75,-73.97", name="coordinates")
-                input(class="input-mini", type="text", placeholder="e.g. 5", name="radius")
-                span.help-block Latitude, longitude
+                input(id="locations", class="input-med", type="text", placeholder="N/W  e.g. 40.75,-73.97", name="locations")
+                input(id="radius", class="input-mini", type="text", placeholder="e.g. 5", name="radius")
+                label(class="checkbox")
+                  input(id="local", type="checkbox", name="local") 
+                  | Near me.
 
-                button.btn(type="submit") Submit
+                hr
+                button.btn(id="submit-btn", type="submit", class="btn-primary") Submit Query!
+                button.btn(id="reset-btn", type="reset", class="btn-danger pull-right") Reset.
 
-
-        div(class="span6")
-          //div(class="result-info")
-            span(class='lead') results:
-          div(id="tweet-well", class="well")
-            img(class="text-center", id="loader", src="http://www.oohrocks.com/images/ajax-loader.gif", alt="loading...")
+        div(class="span6 offset1")
+          
+          div(class='lead')
+            span(id="results-header")
+          div(id="tweet-well", class="well height-55")
+            img(class="text-center", id="loader", src="/images/ajax-loader.gif", alt="loading...")
             span(class='tweet')
+          div(id="map_canvas", class="span6 map")
 
-    script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js')
-    script(src='//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.4/require.min.js', data-main='scripts/main')
+      div(class="row")
+        div(class="span6")
 
+    script(src='components/socket.io/dist/socket.io.min.js')
+    script(src='components/requirejs/require.js', data-main='scripts/main')
+      
     script
       var _gaq=[['_setAccount','UA-37762861-1'],['_trackPageview']];
       (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];

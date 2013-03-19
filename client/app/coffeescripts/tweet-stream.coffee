@@ -30,11 +30,11 @@ define ['jquery', 'collections'], ->
 
   streamer = {
     init: (queryObj) ->
-      app.GrabTweets.fetch 
+      app.Tweets.fetch 
         data: queryObj
         success: ->
           window.clearInterval window.timer if window.timer
-          window.tweets = app.GrabTweets.models[0].attributes.results
+          window.tweets = app.Tweets.models[0].attributes.results
           if tweets.length > 0
 
             # this is kinda hacky ... meant to show a tweet asap, starts with last
@@ -52,6 +52,6 @@ define ['jquery', 'collections'], ->
               $(".tweet").html "no results for this query."
               $(".tweet").fadeIn()
   }
-  return streamer;
+  return streamer
 
   

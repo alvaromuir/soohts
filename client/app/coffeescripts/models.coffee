@@ -1,7 +1,8 @@
 # Models
 
 define ['backbone'], ->
-  class GrabTweet extends Backbone.Model
+  class Tweet extends Backbone.Model
+
 
   @app = window.app ? {}
-  @app.GrabTweet = GrabTweet
+  @app.Tweet = Tweet

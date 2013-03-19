@@ -1,28 +1,78 @@
 #global define
-@app = window.app ? {}
 
-define ['tweet-stream'], (stream) ->
+define ['jquery', 'underscore', 'twitter', 'maps', 'form-clean'], ($, _, twitter, maps, formCleaner) ->
   'use strict'
-  stream.init "q":"@cbsoutdoor"
 
-  $("#filter-form").submit (e) ->    
-    $inputs = $ "#filter-form :input"
-    values = {}
-    $inputs.each ->
-      values[this.name] = $(this).val()
-    $(this)[0].reset();
+  $ ->
+    @app = window.app ? {}
 
-    queryObj = {}
-    queryObj["q"] = encodeURIComponent values.keywords
+    maps.setGlobalUserGeo
+      lat: 40.7522
+      lng: -73.9755
 
-    if values.coordinates
-      searchRadius = ','
-      if values.radius
-        searchRadius += values.radius + 'mi'
+    # form variables
+    $keywords   = $ '#keywords'
+    $count      = $ '#quantity'
+    $locations  = $ '#locations'
+    $radius     = $ '#radius'
+    $rsltsText  = $ '#results-header'
+    $submit     = $ '#submit-btn'
+    $well       = $ '#tweet-well'
+    $map        = $ '#map_canvas'
+    radValue    = {}
+
+    $submit.on 'click', ->
+      queryObj = {}
+      radValue = formCleaner.setQueryRadius $radius.val().trim()
+
+      queryObj['q'] = formCleaner.setQueryKeywords $keywords.val().trim()
+
+      if formCleaner.contentExists $locations
+        if _.include $locations.val().trim(), 'My Current Location'
+          queryObj['geocode'] = app.userGeo['lat']+','+app.userGeo['lng']+','+radValue.miles+'mi'
+          $(document).trigger 'app.queryObjResults', queryObj
+        else
+          formCleaner.setQueryLocation $locations.val().trim(), (rslts) ->
+            queryObj['geocode'] = rslts.lat + ',' + rslts.lng + ',' +  radValue.miles + 'mi'
+            $(document).trigger 'app.queryObjResults', queryObj
+
       else
-        searchRadius += '1mi'
-      queryObj["geocode"] = values.coordinates + searchRadius
+        $(document).trigger 'app.queryObjResults', queryObj
 
-    stream.init queryObj
+      if formCleaner.contentExists($keywords) == false and formCleaner.contentExists($locations) == false and formCleaner.contentExists($radius) == false
+        $rsltsText.show().html 'Results for CBS Outdoor related Tweets :'
 
-    return false
+      if formCleaner.contentExists($keywords) == false and _.trim $('#locations').val(), '"' == 'My Current Location' and formCleaner.contentExists($radius) == false
+        $rsltsText.show().html 'Results for CBS Outdoor related Tweets near me :'
+
+      return false
+
+
+    $(document).on 'app.queryObjResults', (e, queryObj) ->
+      if queryObj.geocode
+        rslts = 
+          lat: queryObj.geocode.split(',')[0]
+          lng: queryObj.geocode.split(',')[1]
+      else
+        rslts = 
+           lat: app.userGeo.lat
+           lng: app.userGeo.lng
+
+      $map.show()
+      
+      app.rsltMap = maps.createMap 'map_canvas', rslts.lat, rslts.lng
+      maps.genRadius app.rsltMap, 
+        radius: radValue.meters
+        center: app.rsltMap.getCenter()
+
+      if parseInt $count.val().trim()
+        queryObj.rpp = $count.val()
+      else
+        queryObj.rpp = 15
+
+      twitter.getTweets queryObj, (tweets) ->
+        _.each tweets, (tweet) ->
+          twitter.cleanTweet tweet.attributes, (rslt) ->
+            twitter.mapTweet rslt, app.rsltMap
+
+

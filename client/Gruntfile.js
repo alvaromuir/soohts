@@ -120,9 +120,12 @@ module.exports = function (grunt) {
             test: {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/spec',
-                    src: '*.coffee',
-                    dest: 'test/spec'
+                    cwd: 'test/spec/',
+                    src: '**/*.coffee',
+                    dest: 'test/spec/',
+                    rename: function(destBase, destPath) {
+                        return destBase + destPath.replace(/\.coffee$/, '.js');
+                    }
                 }]
             }
         },

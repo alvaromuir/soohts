@@ -15,7 +15,7 @@ soohtsdb.init()
 # Logger setup
 module.exports.appLogger = appLogger = bunyan.createLogger
   name: serverName + ' RESTful Server'
-  level: process.env.LOG_LEVEL || 'warn'
+  level: process.env.LOG_LEVEL || 'info'
   stream: process.stdout
   serializers: bunyan.stdSerializers
 
