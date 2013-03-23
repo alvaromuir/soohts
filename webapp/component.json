@@ -1,0 +1,19 @@
+{
+  "name": "soohts",
+  "version": "0.0.1",
+  "dependencies": {
+    "backbone": "~1.0.0",
+    "eve-adobe": "~0.2.4",
+    "handlebars": "~1.0.0-rc.3",
+    "jquery": "~1.9.1",
+    "lodash": "~1.0.1",
+    "modernizr": "~2.6.2",
+    "moment": "~2.0.0",
+    "raphael": "~2.1.0",
+    "requirejs": "~2.1.4",
+    "requirejs-plugins": "latest",
+    "sass-bootstrap": "~2.3.0",
+    "socket.io-client": "~0.9.11",
+    "underscore.string": "~2.3.1"
+  }
+}

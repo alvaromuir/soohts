@@ -1,0 +1,32 @@
+@import 'sass-bootstrap/lib/bootstrap';
+
+
+#map_canvas {
+  //display: none;
+}
+
+#tweet-well {
+  display: none;
+}
+
+.result-info {
+  height: 200px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin: 40px auto 0 auto;
+  @include border-radius(5px);  
+}
+
+.height-55 {
+  height: 55px;
+}
+
+.map {
+  height: 380px;
+  margin: 0;
+}
+
+.container {
+	position: relative;
+	margin: 3%;
+}
