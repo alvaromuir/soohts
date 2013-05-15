@@ -16,7 +16,6 @@
       collections: 'collections',
       routers: 'routers',
       view: 'views',
-      socket: 'socket',
       maps: 'maps'
     },
     shim: {

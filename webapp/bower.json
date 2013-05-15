@@ -13,7 +13,6 @@
     "requirejs": "git://github.com/jrburke/requirejs#2.1.5",
     "requirejs-plugins": "git://github.com/millermedeiros/requirejs-plugins.git#1.0.1",
     "sass-bootstrap": "git://github.com/jlong/sass-twitter-bootstrap.git#2.3.1",
-    "socket.io-client": "git://github.com/LearnBoost/socket.io-client.git#0.9.11",
     "underscore.string": "git://github.com/epeli/underscore.string.git#2.3.1"
   }
 }
