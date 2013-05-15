@@ -8,9 +8,8 @@ require.config
     underscore: '../components/lodash/dist/lodash.underscore.min'
     'underscore.string': '../components/underscore.string/dist/underscore.string.min'
     backbone: '../components/backbone/backbone-min'
-    moment: '../components/moment/moment.min'
+    moment: '../components/moment/min/moment.min'
     handlebars:'../components/handlebars/handlebars'
-    'socket.io': '../componets/socket.io-client/dist/socket.io.min'
 
     models: 'models'
     collections: 'collections'
@@ -36,9 +35,8 @@ require.config
 
 
 
-define 'googleMaps', ['async!http://maps.google.com/maps/api/js?v=3&sensor=false'], ->
+define 'googleMaps', ['async!http://maps.google.com/maps/api/js?v=3&sensor=false&region=US'], ->
   return window.google.maps
-
 
 require ['utils', 'app', 'jquery', 'bootstrap'], (utils, app, $) ->
   'use strict'

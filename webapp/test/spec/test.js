@@ -1,11 +1,9 @@
 (function() {
   'use strict';
 
-  describe('Give it some context', function() {
-    return describe('maybe a bit more context here', function() {
-      return it('should run here few assertions', function() {
-        return (expect(1 + 1)).to.equal(2);
-      });
+  describe('The soohts', function() {
+    return it('test suite should perform basic calculations', function(done) {
+      return (expect(1 + 1)).to.equal(1);
     });
   });
 

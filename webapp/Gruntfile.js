@@ -19,7 +19,7 @@ module.exports = function (grunt) {
     var yeomanConfig = {
         app: 'app',
         dist: 'dist',
-        server: 'server'
+        test: 'test'
     };
 
     grunt.initConfig({
@@ -30,7 +30,7 @@ module.exports = function (grunt) {
                 tasks: ['coffee']
             },
             coffeeTest: {
-                files: ['test/spec/{,*/}*.coffee'],
+                files: ['<%= yeoman.test %>/spec/{,*/}*.coffee'],
                 tasks: ['coffee:test']
             },
             compass: {
@@ -112,7 +112,9 @@ module.exports = function (grunt) {
             all: {
                 options: {
                     run: true,
-                    urls: ['http://localhost:<%= connect.options.port %>/index.html']
+                    urls: ['http://localhost:<%= connect.options.port %>/index.html'],
+                    ignoreLeaks: true,
+                    reporter: 'Nyan'
                 }
             }
         },
@@ -226,10 +228,13 @@ module.exports = function (grunt) {
         },
         imagemin: {
             dist: {
+                options: {
+                    optimizationLevel: 3
+                },
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.app %>/images',
-                    src: '{,*/}*.{png,jpg,jpeg}',
+                    src: ['*.gif', '*.jpeg', '*.jpg', '*.png', '*.svg'],
                     dest: '<%= yeoman.dist %>/images'
                 }]
             }
@@ -274,7 +279,8 @@ module.exports = function (grunt) {
                     dest: '<%= yeoman.dist %>',
                     src: [
                         '*.{ico,txt}',
-                        '.htaccess'
+                        '.htaccess',
+                        'images/*'
                     ]
                 }]
             }

@@ -28,46 +28,60 @@ define ['jquery', 'googleMaps'], ($) ->
 
         codeAddress: (address, cb) ->
             geocoder = new google.maps.Geocoder()
-
-            geocoder.geocode
-                'address': address
-            , (results, status) ->
-                rslts = {}
-                if status == google.maps.GeocoderStatus.OK
-                    if results[0].geometry.location.hb
-                        rslts.lat   = results[0].geometry.location.hb
+            if typeof address == 'object'
+                geocoder.geocode
+                    'latLng': address
+                , (results, status) ->
+                    if status is google.maps.GeocoderStatus.OK
+                        console.lo results
                     else
-                        rslts.lat   = results[0].geometry.location.mb
+                        console.log 'error searching latlng'
 
-                    if results[0].geometry.location.ib
-                        rslts.lng   = results[0].geometry.location.ib
+            else
+                geocoder.geocode
+                    'address': address
+                , (results, status) ->
+                    geoData = {}
+                    if status is google.maps.GeocoderStatus.OK
+                        geoData = results[0] if results.length = 1
+                        geoData.lat = geoData.geometry.location.lat()
+                        geoData.lng = geoData.geometry.location.lng()
+                        cb geoData
+                        return
+
+                        _(results).each (v, k) ->
+                            address_components = results[k].address_components
+                            if address_components[3]
+                                short_name = address_components[3].short_name
+                                geoData = results[k] if _.find(app.utils.states(), abbreviation: short_name)
+                                if geoData.geometry.location
+                                    geoData.lat = geoData.geometry.location.lat()
+                                    geoData.lng = geoData.geometry.location.lng()
+                        cb geoData
                     else
-                        rslts.lng   = results[0].geometry.location.nb
-
-                    cb rslts
+                        if app.userGeo.lat
+                            geoData.lat   = app.userGeo.lat
+                            geoData.lng   = app.userGeo.lng
+                            cb geoData
+                            return
+                        else
+                            geoData.lat   = 40.7522
+                            geoData.lng   = -73.9755
+                            cb geoData
+                            return
                     return
 
-                else
-                    if app.userGeo.lat
-                        rslts.lat   = app.userGeo.lat
-                        rslts.lng   = app.userGeo.lng
-                        cb rslts
-                        return
-                    else
-                        rslts.lat   = 40.7522
-                        rslts.lng   = -73.9755
-                        cb rslts
-                        return
             return
 
         setGlobalUserGeo: (geoObj) ->
-            app.userGeo = geoObj if geoObj
+            app.userGeo = geoObj ? {}
 
             if Modernizr.geolocation
                 navigator.geolocation.getCurrentPosition (position) ->
-                    app.userGeo = 
-                        lat:  position.coords.latitude
-                        lng: position.coords.longitude
+                    if position.coords.latitude and position.coords.longitude
+                        app.userGeo = 
+                            lat: position.coords.latitude
+                            lng: position.coords.longitude
             return
 
         addMarkers: (gMap, pos, info) ->

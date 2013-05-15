@@ -2,9 +2,9 @@
 
 'use strict'
 @app = window.app ? {}
-
-define ['jquery', 'underscore', 'twitter', 'maps', 'form-clean'], ($, _, twitter, maps, formCleaner) ->
-
+app.buildMap = true
+define ['jquery', 'underscore', 'twitter', 'maps', 'form-clean', 'socket'], ($, _, twitter, maps, formCleaner) ->
+	
 	maps.setGlobalUserGeo
 		lat: 40.7522
 		lng: -73.9755
@@ -18,31 +18,34 @@ define ['jquery', 'underscore', 'twitter', 'maps', 'form-clean'], ($, _, twitter
 	$submit     = $ '#submit-btn'
 	$well       = $ '#tweet-well'
 	$map        = $ '#map_canvas'
+	$local 		= $ '#local'
 	radValue    = {}
+	$report 	= $ '#report'
+	$rsltsTbl   = $ '.table tbody'
 	
 	$submit.on 'click', ->
+
+		$rsltsTbl.empty()
 		queryObj = {}
 		radValue = formCleaner.setQueryRadius $radius.val().trim()
-
 		queryObj.q = formCleaner.setQueryKeywords $keywords.val().trim()
 
 		if formCleaner.contentExists $locations
 			if _.include $locations.val().trim(), 'My Current Location'
-				queryObj.geocode = app.userGeo.lat +','+ app.userGeo.lng +','+ radValue.miles +'mi'
+				queryObj.geocode = app.userGeo.lat+','+app.userGeo.lng+','+radValue.miles+'mi'
 				$(document).trigger 'app.queryObjResults', queryObj
 			else
 				formCleaner.setQueryLocation $locations.val().trim(), (rslts) ->
-					queryObj.geocode = rslts.lat + ',' + rslts.lng + ',' +  radValue.miles + 'mi'
+					queryObj.geocode = rslts.lat+','+rslts.lng+','+radValue.miles+'mi'
 					$(document).trigger 'app.queryObjResults', queryObj
-
 		else
 			$(document).trigger 'app.queryObjResults', queryObj
 
 		if formCleaner.contentExists($keywords) == false and formCleaner.contentExists($locations) == false and formCleaner.contentExists($radius) == false
 			$rsltsText.show().html 'Results for CBS Outdoor related Tweets :'
 
-		if formCleaner.contentExists($keywords) == false and _.trim $('#locations').val(), '"' == 'My Current Location' and formCleaner.contentExists($radius) == false
-			$rsltsText.show().html 'Results for CBS Outdoor related Tweets near me :'
+		if formCleaner.contentExists($keywords) == false and $('#locations').val().trim() == '"My Current Location"' and formCleaner.contentExists($radius) == false
+			$rsltsText.show().html 'Random Tweets near me :'
 
 		return false
 
@@ -58,6 +61,7 @@ define ['jquery', 'underscore', 'twitter', 'maps', 'form-clean'], ($, _, twitter
 				lng: app.userGeo.lng
 
 		$map.show()
+		$report.show()
 
 		app.rsltMap = maps.createMap 'map_canvas', rslts.lat, rslts.lng
 		maps.genRadius app.rsltMap, 
@@ -70,6 +74,8 @@ define ['jquery', 'underscore', 'twitter', 'maps', 'form-clean'], ($, _, twitter
 			queryObj.rpp = 15
 
 		twitter.getTweets queryObj, (tweets) ->
-			_.each tweets, (tweet) ->
+			_.each tweets, (tweet, index) ->
 				twitter.cleanTweet tweet.attributes, (rslt) ->
-					twitter.mapTweet rslt, app.rsltMap
+					rslt['index'] = index+1
+					twitter.mapTweet rslt, app.rsltMap if app.buildMap
+					twitter.tableTweet rslt, $rsltsTbl

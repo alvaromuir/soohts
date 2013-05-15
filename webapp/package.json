@@ -24,7 +24,8 @@
     "grunt-mocha": "~0.2.2",
     "grunt-open": "~0.2.0",
     "matchdep": "~0.1.1",
-    "phantomjs": "1.8.1-1"
+    "phantomjs": "1.8.1-1",
+    "jquery": "~1.8.3"
   },
   "engines": {
     "node": ">=0.8.0"

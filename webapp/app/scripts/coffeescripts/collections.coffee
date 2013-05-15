@@ -8,7 +8,13 @@ define ['models'], ->
 	app.collections =
 		Tweets: Backbone.Collection.extend
 			model: app.Tweet
-			url: 'http://localhost:8000/api/response.json'
+			#url: 'http://restserv.dev/api/response.json'
+			url: 'https://search.twitter.com/search.json?'
+			sync: (method, model, options) ->  
+    			options.timeout = 10000
+    			options.dataType = "jsonp"
+    			return Backbone.sync method, model, options
+
 			parse: (res) ->
 				return res.results
 

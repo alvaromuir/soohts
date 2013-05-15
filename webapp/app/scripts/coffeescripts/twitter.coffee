@@ -3,7 +3,14 @@
 'use strict'
 @app = window.app ? {}
 
-define ['jquery', 'collections', 'handlebars'], ($, collections) ->
+define ['jquery','moment', 'collections', 'handlebars'], ($, moment, collections) ->
+    # Handlebars helpers
+    Handlebars.registerHelper 'daystamp', (input) ->
+        return moment(input).format('MMMM Do, YYYY')
+
+    Handlebars.registerHelper 'when', (input) ->
+        return moment(input).fromNow()
+
     app.twitter =
         getTweets: (queryObj, cb) ->
             app.Tweets.fetch
@@ -12,6 +19,7 @@ define ['jquery', 'collections', 'handlebars'], ($, collections) ->
                       window.tweets = app.Tweets.models
                       cb tweets
                       return tweets
+
 
         cleanTweet: (obj, cb) ->
             rslt =
@@ -23,6 +31,7 @@ define ['jquery', 'collections', 'handlebars'], ($, collections) ->
                 msgId: obj.id
                 text: obj.text
                 tweetUrl: 'https://twitter.com/' + obj.from_user_name + 'status/'+ obj.id
+                timestamp: obj.created_at
                 geo: obj.geo
                 location: obj.location
             cb rslt
@@ -41,5 +50,9 @@ define ['jquery', 'collections', 'handlebars'], ($, collections) ->
                 app.utils.geocodeAddress obj.location, (coords) ->
                     app.maps.addMarkers map, coords, infoWindowData 
                     return
+
+        tableTweet: (obj, table) ->
+            rsltsTableRow = Handlebars.compile($('#tweet-results-row').html())(obj)
+            table.append rsltsTableRow
 
     return app.twitter

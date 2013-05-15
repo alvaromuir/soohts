@@ -5,6 +5,8 @@
 
 'use strict'
 @app = window.app ? {}
+app.buildMap = true 
+app.locVal = ''
 
 define ['jquery'], ($) ->
     $keywords   = $ '#keywords'
@@ -13,10 +15,12 @@ define ['jquery'], ($) ->
     $rsltsText  = $ '#results-header'
     $chkLocal   = $ 'input[name=local]'
     $reset      = $ '#reset-btn'
+    $map        = $ '#map_canvas'
+    $report     = $ '#report'
 
     utils = 
         setQueryKeywords: (qKywrds) ->
-            return qKeywords = encodeURIComponent qKywrds.toString() or 'cbsoutdoor'
+            return qKeywords = encodeURIComponent qKywrds.toString() or ''
 
         setQueryRadius: (qRad) ->
             if isNaN parseFloat qRad
@@ -41,7 +45,8 @@ define ['jquery'], ($) ->
         app.utils.setUsersGeo()
         $(this).closest('form').find('input[type=text], textarea').val('');
         $rsltsText.fadeToggle()
-        $('#map_canvas').fadeToggle()
+        $map.fadeToggle()
+        $report.fadeToggle()
         return false
 
     $keywords.on 'keyup', ->
@@ -103,6 +108,7 @@ define ['jquery'], ($) ->
                 $rsltsText.append ' of you :'
 
         if utils.contentExists($locations) == false and utils.contentExists($radius) == false
+            # app.buildMap = false
             if $(this).val().trim().length > 0
                 $rsltsText.html 'Results for '
                 $rsltsText.append $(this).val().trim()
@@ -140,6 +146,7 @@ define ['jquery'], ($) ->
                 $rsltsText.append ' of you :'
 
         if utils.contentExists($keywords) and utils.contentExists($radius) == false
+            # app.buildMap = false
             if $(this).val().trim().length > 0
                 $rsltsText.html 'Results for '
                 $rsltsText.append $keywords.val().trim()
@@ -175,6 +182,7 @@ define ['jquery'], ($) ->
                 $rsltsText.append ' of you :'
 
         if utils.contentExists($keywords) == false and utils.contentExists($radius) == false
+            # app.buildMap = false
             if $(this).val().trim().length > 0
                 $rsltsText.html 'Random results'
                 $rsltsText.append ' near ' + $(this).val().trim() + ':'
@@ -203,6 +211,7 @@ define ['jquery'], ($) ->
                 $rsltsText.append ' near ' + $locations.val().trim() + ':'
                   
         if utils.contentExists($keywords) and utils.contentExists($locations) == false
+            # app.buildMap = false
             if $(this).val().trim().length > 0
                 $rsltsText.html 'Results for '
                 $rsltsText.append $keywords.val().trim()
@@ -238,6 +247,8 @@ define ['jquery'], ($) ->
                 $rsltsText.append ' near ' + $locations.val().trim() + ':'
 
         if utils.contentExists($keywords) == false and utils.contentExists($locations) == false
+            # app.buildMap = false
+            app.buildMap = true #see app.js for explaination. draws map if locations are selected.
             if $(this).val().trim().length > 0
                 $rsltsText.html 'Random results'
 
@@ -255,8 +266,11 @@ define ['jquery'], ($) ->
 
     $chkLocal.click ->
         if $(this).is ':checked'
+            app.locVal = $locations.val()
             $locations.val '"My Current Location"'
+            $locations.css "color", "#c00"
         else
-            $locations.val ''
+            $locations.val app.locVal
+            $locations.css "color", "#666"
 
     app.utils.form_utils = utils

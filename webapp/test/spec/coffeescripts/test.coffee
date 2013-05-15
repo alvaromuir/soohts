@@ -1,5 +1,6 @@
 'use strict';
-describe 'Give it some context', ->
-    describe 'maybe a bit more context here', ->
-        it 'should run here few assertions', ->
-        	(expect 1+1).to.equal(2)
+
+
+describe 'The soohts', ->
+    it 'test suite should perform basic calculations', (done) ->
+    	(expect 1+1).to.equal(1)
