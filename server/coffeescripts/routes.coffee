@@ -58,6 +58,6 @@ module.exports =
       searchString = twitterSearchUrl + rsltString
       client.get searchString, (err, creq, cres, cobj) ->
         if err
-          res.send err
+          res.send err 
         res.send cobj
         return next()

@@ -40,4 +40,4 @@ module.exports =
       access_token: '37232975-bHnl1SJCMwBVKuovFIbNuRtYxPfKCVlzYob7QhQla'
       access_token_secret: 'wWj7UKhbQF58TDD7jc0ExpLdAfk60DEAKBNTiLUrb0'
     init: ->
-      new Twitter this.keys
+      return new Twitter this.keys
