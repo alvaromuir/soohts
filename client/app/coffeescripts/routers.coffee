@@ -1,4 +1,0 @@
-# Routers
-
-define ['backbone'], ->
-  
